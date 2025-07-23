@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 400px;
+            max-width: 90%;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+        }
+        
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+        }
+        
+        .length-display {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 0.5rem;
+            color: #3498db;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .result {
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            word-break: break-all;
+        }
+        
+        .password {
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+            color: #27ae60;
+            margin: 1rem 0;
+        }
+        
+        .copy-btn {
+            background-color: #27ae60;
+            margin-top: 1rem;
+        }
+        
+        .copy-btn:hover {
+            background-color: #219653;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Password Generator</h1>
+        
+        <div class="control-group">
+            <label for="length">Password Length: <span class="length-display" id="lengthValue">12</span></label>
+            <input type="range" id="length" min="6" max="32" value="12">
+        </div>
+        
+        <button id="generate">Generate Password</button>
+        
+        <div class="result">
+            <div id="password" class="password">Click Generate</div>
+            <button id="copy" class="copy-btn">Copy to Clipboard</button>
+        </div>
+    </div>
+
+    <script>
+        const passwordEl = document.getElementById('password');
+        const generateBtn = document.getElementById('generate');
+        const copyBtn = document.getElementById('copy');
+        const lengthSlider = document.getElementById('length');
+        const lengthValue = document.getElementById('lengthValue');
+        
+        const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
+        
+        function generatePassword(length) {
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                password += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return password;
+        }
+        
+        lengthSlider.addEventListener('input', function() {
+            lengthValue.textContent = this.value;
+        });
+        
+        // Store password in variable and log it with concatenated message
+        const passwordLength = 12;
+        const password = generatePassword(passwordLength);
+        console.log("Generated password: " + password);
+        
+        generateBtn.addEventListener('click', function() {
+            const length = parseInt(lengthSlider.value);
+            const newPassword = generatePassword(length);
+            passwordEl.textContent = newPassword;
+            console.log("Generated password: " + newPassword);
+        });
+        
+        copyBtn.addEventListener('click', function() {
+            const password = passwordEl.textContent;
+            if (password && password !== 'Click Generate') {
+                navigator.clipboard.writeText(password).then(() => {
+                    copyBtn.textContent = 'Copied!';
+                    setTimeout(() => {
+                        copyBtn.textContent = 'Copy to Clipboard';
+                    }, 2000);
+                });
+            }
+        });
+        
+        // Generate initial password
+        generateBtn.click();
+    </script>
+</body>
+</html>
